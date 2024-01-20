@@ -82,48 +82,42 @@ images.forEach(({ preview, original, description }) => {
   link.appendChild(img);
   galleryItem.appendChild(link);
   gallery.appendChild(galleryItem);
+  
 });
 
-gallery.addEventListener('click', function (event) {
-  const target = event.target;
+
+
+gallery.addEventListener('click', function (e) {
+  const target = e.target;
 
   if (target.tagName === 'IMG') {
+    e.preventDefault();
     const largeImage = target.dataset.source;
+    const imageDescription = target.alt; 
 
     const instance = basicLightbox.create(`
         <div class="modal">
-          <img src="${largeImage}" alt="largeImage" width="800" height="600">
+          <img src="${largeImage}" alt="${imageDescription}" width="800" height="600">
         </div>`,
-      {
-        onShow: instance => {
-          console.log('ADD LISTENER');
-          document.addEventListener('keydown', closeModal);
+        {
+          onShow: instance => {
+          
+            document.addEventListener('keydown', closeModal);
+          },
+         
+          onClose: instance => {
+           
+            document.removeEventListener('keydown', closeModal);
+          },
         },
-      
-        onClose: instance => {
-          console.log('REMOVE LISTENER');
-          document.removeEventListener('keydown', closeModal);
-        },
-      },
-      
-
-    );
-
-    function closeModal(e) {
+      );
     
-      if (e === 'Esc'){
-        instance.close(); 
-       
+      function closeModal(e) {
+      
+        if (e.code === 'Escape') instance.close();
       }
-      // console.log(e.code);
-      instance.close();
-    }
     
+      instance.show();
   
-    instance.show();
   }
-  
 });
-
-
-
