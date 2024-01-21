@@ -3,24 +3,29 @@
 
 }
 
-
-.gallery {
-  list-style: none;
+.gallery{
+  width: 1440px;
   display: flex;
-  padding: 24px 156px;
-    flex-wrap: wrap;
-    gap: 24px;
-    row-gap: 24px;
-    width: 1440px;
-    height: 696 px;
+  flex-wrap: wrap;
+  width: calc((1440px-72)/3);
+  gap: 24px;
+  row-gap: 24px;
+  
+
+}
+
+.gallery-item {
+  list-style: none; 
+    
     background-color: #FFF;
     
   }
   
-  .gallery-image {
+  .gallery-images {
     width: 360px;
     height: 200px;
     cursor: pointer;
+    
   }
  
 

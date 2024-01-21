@@ -64,60 +64,60 @@
     },
   ];
   const gallery = document.querySelector('.gallery');
-
-images.forEach(({ preview, original, description }) => {
-  const galleryItem = document.createElement('li');
-  galleryItem.classList.add('gallery-item');
-
-  const link = document.createElement('a');
-  link.classList.add('gallery-link');
-  link.setAttribute('href', original);
-
-  const img = document.createElement('img');
-  img.classList.add('gallery-image');
-  img.src = preview;
-  img.setAttribute('data-source', original);
-  img.alt = description;
-
-  link.appendChild(img);
-  galleryItem.appendChild(link);
-  gallery.appendChild(galleryItem);
-  
-});
-
-
-
-gallery.addEventListener('click', function (e) {
-  const target = e.target;
-
-  if (target.tagName === 'IMG') {
-    e.preventDefault();
-    const largeImage = target.dataset.source;
-    const imageDescription = target.alt; 
-
-    const instance = basicLightbox.create(`
-        <div class="modal">
-          <img src="${largeImage}" alt="${imageDescription}" width="800" height="600">
-        </div>`,
-        {
-          onShow: instance => {
-          
-            document.addEventListener('keydown', closeModal);
-          },
-         
-          onClose: instance => {
-           
-            document.removeEventListener('keydown', closeModal);
-          },
-        },
-      );
-    
-      function closeModal(e) {
-      
-        if (e.code === 'Escape') instance.close();
-      }
-    
-      instance.show();
-  
+  function imgTemplate(images) {
+    return `<li class="gallery-item">
+    <a class = "gallery-link" href = "${images.original}">
+    <img class = "gallery-images"
+      src= "${images.preview}"
+      data-source = "${images.original}"
+      alt="${images.description}"
+    />
+  </a>
+  </li>`;
   }
-});
+  
+  function imgTemplateList(images) {
+    return images.map(imgTemplate).join('');
+    
+  }
+  
+  function render() {
+    const markup = imgTemplateList(images);
+    gallery.innerHTML = markup;
+  }
+  render();
+
+  
+    const galleryLink = document.querySelectorAll(".gallery-link")
+    galleryLink.forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+    })})
+  
+    gallery.addEventListener('click', e => {
+      if (e.target === e.currentTarget) return;
+
+      const clickedImage = e.target.closest('.gallery-link').querySelector('img');
+  const largeImage = clickedImage.dataset.source;
+  const imageDescription = clickedImage.alt;
+
+  const instance = basicLightbox.create(`
+    <div class="modal">
+      <img src="${largeImage}" alt="${imageDescription}" width="800" height="600"/>
+    </div>`,
+  {
+    onShow: instance => {
+      document.addEventListener('keydown', closeModal);
+    },
+    onClose: instance => {
+      document.removeEventListener('keydown', closeModal);
+    },
+  }
+);
+
+function closeModal(e) {
+if (e.code === 'Escape') instance.close();
+}
+
+instance.show();
+    })
